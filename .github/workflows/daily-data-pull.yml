@@ -2,7 +2,7 @@ name: Daily Overwatch Data Pull
 
 on:
   schedule:
-    - cron: "15 14 * * *"  # Runs daily at 14:15 UTC
+    - cron: "15 14 * * *"  # Daily at 14:15 UTC
   workflow_dispatch:
 
 permissions:

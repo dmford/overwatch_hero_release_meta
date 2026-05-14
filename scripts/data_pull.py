@@ -16,7 +16,7 @@ import requests
 import pandas as pd
 
 from pathlib import Path
-
+from datetime import datetime, timezone
 
 # Clear terminal for clean reruns
 os.system("cls" if os.name == "nt" else "clear")
@@ -143,7 +143,15 @@ df["timestamp"] = pd.to_datetime(
 # 8. SAVE FLATTENED DATA
 # ==================================================
 
-snapshot_date = df["timestamp"].iloc[0].strftime("%Y_%m_%d")
+# Use actual pull date for archive filename.
+# The source timestamp may refer to the upstream scrape date, not today's collection date.
+pull_datetime = datetime.now(timezone.utc)
+pull_date = pull_datetime.strftime("%Y_%m_%d")
+
+df["pull_datetime_utc"] = pull_datetime
+df["pull_date"] = pull_date
+
+snapshot_date = pull_date
 
 csv_output_path = (
     RAW_DATA_DIR /
