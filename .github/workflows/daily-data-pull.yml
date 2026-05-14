@@ -1,0 +1,38 @@
+name: Daily Overwatch Data Pull
+
+on:
+  schedule:
+    - cron: "15 14 * * *"  # Runs daily at 14:15 UTC
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  pull-data:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run data pull
+        run: |
+          python scripts/data_pull.py
+
+      - name: Commit new snapshot if changed
+        run: |
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git add data/raw/
+          git diff --cached --quiet || git commit -m "Add daily Overwatch hero stats snapshot"
+          git push
