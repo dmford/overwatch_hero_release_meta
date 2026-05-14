@@ -54,12 +54,47 @@ response.raise_for_status()
 
 raw_text = response.text
 
+pull_datetime = datetime.now(timezone.utc)
+pull_date = pull_datetime.strftime("%Y_%m_%d")
+
+# Convert JSONP wrapper into JSON text
+json_text = raw_text.removeprefix("jsonp(").removesuffix(")")
+
+# Parse JSON
+data = json.loads(json_text)
+
 
 # ==================================================
 # 4. SAVE RAW FILE
 # ==================================================
 
-raw_output_path = RAW_DATA_DIR / "winrate_data_raw.js"
+raw_output_path = (
+    RAW_DATA_DIR /
+    f"winrate_data_raw_{pull_date}.js"
+)
+
+# ==================================================
+# SAVE PARSED JSON SNAPSHOT
+# ==================================================
+
+json_snapshot_dir = RAW_DATA_DIR / "json_snapshots"
+json_snapshot_dir.mkdir(parents=True, exist_ok=True)
+
+json_output_path = (
+    json_snapshot_dir /
+    f"raw_api_snapshot_{pull_date}.json"
+)
+
+if not json_output_path.exists():
+
+    with open(json_output_path, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2)
+
+    print(f"\nJSON snapshot saved to:\n{json_output_path}")
+
+else:
+
+    print(f"\nJSON snapshot already exists for {pull_date}")
 
 with open(raw_output_path, "w", encoding="utf-8") as f:
     f.write(raw_text)
@@ -76,10 +111,6 @@ print(f"\nRaw JS data file saved to:\n{raw_output_path}")
 # So we remove the wrapper before using json.loads().
 if not raw_text.startswith("jsonp("):
     raise ValueError("Unexpected file format: data does not start with jsonp(")
-
-json_text = raw_text.removeprefix("jsonp(").removesuffix(")")
-
-data = json.loads(json_text)
 
 
 # ==================================================
@@ -143,11 +174,6 @@ df["timestamp"] = pd.to_datetime(
 # 8. SAVE FLATTENED DATA
 # ==================================================
 
-# Use actual pull date for archive filename.
-# The source timestamp may refer to the upstream scrape date, not today's collection date.
-pull_datetime = datetime.now(timezone.utc)
-pull_date = pull_datetime.strftime("%Y_%m_%d")
-
 df["pull_datetime_utc"] = pull_datetime
 df["pull_date"] = pull_date
 
@@ -159,13 +185,15 @@ csv_output_path = (
 )
 
 if csv_output_path.exists():
+
     print(f"\nSnapshot already exists for {snapshot_date}.")
-    print("Skipping save to avoid duplicate data.")
-    raise SystemExit
+    print("Skipping duplicate CSV save.")
 
-df.to_csv(csv_output_path, index=False)
+else:
 
-print(f"\nFlattened CSV saved to:\n{csv_output_path}")
+    df.to_csv(csv_output_path, index=False)
+
+    print(f"\nFlattened CSV saved to:\n{csv_output_path}")
 
 
 # ==================================================
