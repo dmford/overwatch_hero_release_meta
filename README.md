@@ -1,128 +1,61 @@
-# overwatch_hero_release_meta
+# Overwatch Hero Release Meta
 
 ## Overview
 
-This project analyzes how new hero releases affect the competitive Overwatch meta over time.
+This project builds an automated historical dataset of Overwatch hero statistics.
 
-The primary goal is to measure:
-- how disruptive new hero releases are,
-- how quickly the meta stabilizes afterward,
-- and whether consistent patterns emerge across roles, ranks, regions, and release periods.
+The current version focuses on daily data collection rather than final analysis. The purpose is to preserve hero-level pick-rate and win-rate snapshots over time so that future analyses can evaluate hero releases, balance patches, and meta shifts.
 
-The project is designed as a data analysis and statistical modeling exercise using Python, with a focus on event-study style analysis, ecosystem dynamics, and time-series visualization.
-
----
-
-## Planned Research Questions
-
-Examples of questions this project may explore:
-
-- Do new hero releases measurably increase meta volatility?
-- How long does the competitive meta take to stabilize after a release?
-- Which hero roles create the largest disruption?
-- Has adaptation speed changed over the lifespan of Overwatch?
-- Do metas become more or less concentrated after hero releases?
-- Are there consistent post-release adoption patterns?
-
----
-
-## Planned Metrics
-
-The core planned metric is a normalized **Meta Volatility Index (MVI)**, intended to measure how much hero pick-rate distributions change from one period to the next.
-
-Additional planned metrics may include:
-- role-specific volatility,
-- hero concentration / diversity indices,
-- adoption curves,
-- stabilization windows,
-- and comparative event-study summaries across hero releases.
-
----
-
-## Planned Workflow
-
-### Phase 1 — Data Collection
-- Pull hero pick-rate / win-rate data
-- Build a historical panel dataset
-- Standardize hero role classifications
-- Track hero release dates and major patches
-
-### Phase 2 — Data Cleaning
-- Construct consistent daily or weekly time-series data
-- Harmonize role categories across Overwatch versions
-- Exclude or flag structurally unusual releases/events
-
-### Phase 3 — Analysis
-- Build volatility and concentration metrics
-- Run event-study style before/after analyses
-- Compare disruption magnitude across hero releases
-
-### Phase 4 — Visualization
-- Meta volatility plots
-- Hero adoption curves
-- Stabilization timelines
-- Role-level comparison figures
-
----
+The project uses GitHub Actions to run automatically and append new daily observations without requiring manual collection.
 
 ## Current Status
 
-This repository is currently in the early data-collection and infrastructure phase.
+This repository is currently in the data-collection phase.
 
-Initial development priorities:
-1. Validate accessible historical data sources
-2. Build data pull scripts
-3. Construct a clean reproducible dataset
-4. Prototype the Meta Volatility Index
+It automatically captures daily hero statistics and stores them for future analysis. Planned analysis will evaluate how hero releases, balance updates, and broader meta changes affect pick rates and win rates over time.
 
----
+## Project Motivation
 
-## Tools
+Public game-stat websites often emphasize current performance rather than preserving long-run historical snapshots.
 
-Planned tools/libraries include:
-- Python
-- pandas
-- numpy
-- matplotlib
-- requests
-
-Additional libraries may be added later as needed.
-
----
+This project addresses that problem by collecting hero statistics every day and storing them in a structured format. The dataset becomes more useful over time as additional observations accumulate.
 
 ## Repository Structure
 
-```text
-overwatch_hero_release_meta/
-│
-├── data/
-│   ├── raw/
-│   └── processed/
-│
-├── figures/
-├── tables/
-├── output/
-│
-├── scripts/
-│   ├── data_pull.py
-│   ├── data_cleaning.py
-│   └── analysis.py
-│
-├── README.md
-├── requirements.txt
-└── .gitignore
-```
+- data/
+  - raw/
+  - processed/
+- scripts/
+  - collect_data.py
+- .github/
+  - workflows/
+    - daily_run.yml
+- README.md
+- requirements.txt
 
----
+## Planned Future Analysis
 
-## Notes
+Future versions of this project may examine:
 
-This project is exploratory and intended primarily as a learning and analytical portfolio project.
+- Hero release effects
+- Balance patch effects
+- Pick-rate trends
+- Win-rate trends
+- Meta shifts over time
+- Persistence of hero popularity
 
-The analysis is not intended to make definitive claims about game balance or hero strength.
+## How to Run
 
----
+Install dependencies:
+
+    pip install -r requirements.txt
+
+Run the data collection script:
+
+    python scripts/collect_data.py
 
 ## Author
 
-David Ford, assisted by ChatGPT
+David Ford
+
+This project was developed by David Ford with AI-assisted coding support (ChatGPT) used for debugging, documentation, workflow planning, and code review. Project design, implementation decisions, validation, interpretation, and final repository contents were reviewed and approved by the author.
