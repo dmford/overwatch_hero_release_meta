@@ -1,58 +1,117 @@
-# Overwatch Hero Release Meta
+# Overwatch Hero Meta Tracker
 
-## Overview
+An automated data-collection project that builds a longitudinal dataset of Overwatch hero statistics for future analysis of hero releases, balance patches, and meta shifts.
 
-This project builds an automated historical dataset of Overwatch hero statistics.
+The project collects daily hero-level performance metrics and stores historical snapshots that would otherwise be difficult to reconstruct after the fact. Over time, the resulting dataset can be used to evaluate how game updates influence hero popularity and performance.
 
-The current version focuses on daily data collection rather than final analysis. The purpose is to preserve hero-level pick-rate and win-rate snapshots over time so that future analyses can evaluate hero releases, balance patches, and meta shifts.
+The system runs automatically through GitHub Actions and requires no manual data collection once deployed.
 
-The project uses GitHub Actions to run automatically and append new daily observations without requiring manual collection.
+## Project Goal
+
+The objective is to preserve historical Overwatch hero statistics and create a dataset suitable for future empirical analysis.
+
+Many public gaming-stat websites emphasize current hero performance but do not provide convenient access to long-run historical snapshots. This project addresses that limitation by collecting and archiving daily observations in a structured format.
+
+As the dataset grows, it becomes increasingly useful for studying hero releases, balance changes, and evolving player behavior.
 
 ## Current Status
 
-This repository is currently in the data-collection phase.
+The project is currently in the data-collection phase.
 
-It automatically captures daily hero statistics and stores them for future analysis. Planned analysis will evaluate how hero releases, balance updates, and broader meta changes affect pick rates and win rates over time.
+Daily snapshots are automatically collected and stored for future analysis.
 
-## Project Motivation
+The current workflow captures:
 
-Public game-stat websites often emphasize current performance rather than preserving long-run historical snapshots.
+* Hero pick rates
+* Hero win rates
+* Multiple competitive ranks
+* Multiple regions
+* Multiple platforms
 
-This project addresses that problem by collecting hero statistics every day and storing them in a structured format. The dataset becomes more useful over time as additional observations accumulate.
+The resulting dataset is designed to support future longitudinal analysis of game balance and meta evolution.
+
+## Data Collection Workflow
+
+Each daily run:
+
+1. Collects current hero statistics from public sources.
+2. Captures hero-level pick-rate and win-rate metrics.
+3. Records metadata including region, platform, and competitive rank.
+4. Stores daily snapshots in a structured historical archive.
+5. Updates supporting metadata files.
+6. Preserves historical observations for future analysis.
+
+The workflow is designed to create a consistent daily time series of hero performance metrics.
+
+## Automation
+
+The project uses GitHub Actions to automate collection and archival.
+
+Benefits include:
+
+* Fully automated daily execution
+* Consistent data collection schedule
+* Historical snapshot preservation
+* Cloud-based operation without local maintenance
+* Reproducible data pipeline
+
+The workflow can also be executed manually through the GitHub Actions interface.
 
 ## Repository Structure
 
-- data/
-  - raw/
-  - processed/
-- scripts/
-  - collect_data.py
-- .github/
-  - workflows/
-    - daily_run.yml
-- README.md
-- requirements.txt
+```text
+data/
+    raw/
+        Daily hero-statistic snapshots
+    processed/
+        Derived datasets and future analysis outputs
+
+scripts/
+    collect_data.py
+
+.github/
+    workflows/
+        daily_run.yml
+
+README.md
+requirements.txt
+```
 
 ## Planned Future Analysis
 
-Future versions of this project may examine:
+Future versions of the project may examine:
 
-- Hero release effects
-- Balance patch effects
-- Pick-rate trends
-- Win-rate trends
-- Meta shifts over time
-- Persistence of hero popularity
+* Hero release effects
+* Balance patch effects
+* Pick-rate trends
+* Win-rate trends
+* Meta shifts over time
+* Persistence of hero popularity
+* Competitive-rank differences
+* Regional differences
+* Long-run hero performance trajectories
+
+## Technologies Used
+
+* Python
+* GitHub Actions
+* Automated web data collection
+* CSV-based historical storage
+* Scheduled cloud workflows
 
 ## How to Run
 
 Install dependencies:
 
-    pip install -r requirements.txt
+```bash
+pip install -r requirements.txt
+```
 
-Run the data collection script:
+Run the collection script:
 
-    python scripts/collect_data.py
+```bash
+python scripts/collect_data.py
+```
 
 ## Author
 
